@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+
+/* text-[#9CA3AF]  text-[#6B7280] */
+@theme {
+  --font-lato: 'Lato', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --shadow-soft: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  --clip-diagonal: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+  --clip-diagonal-hero: polygon(0 0, 100% 0, 100% 75%, 0 100%);
+  --clip-parallelogram: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
+  --shadow-overview: rgba(0, 0, 0, 0.1) 0px 10px 20px 0px;
+  --shadow-mobile-navbar: 0 14px 32px rgba(15, 23, 42, 0.12);
+  --breakpoint-xs: 430px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@layer base {
+  body {
+    @apply font-inter;
+  }
+}
+
+@layer utilities {
+  .nav-link {
+    @apply border-b-2 border-transparent pb-1.5 transition-all duration-300 ease-in-out hover:border-[#0b7a31] hover:text-[#0b7a31];
+  }
+
+  /* .active {
+    @apply border-b-2  border-[#0b7a31] text-[#0b7a31];
+  } */
+  .clip-diagonal {
+    clip-path: var(--clip-diagonal);
+  }
+  .clip-diagonal-hero {
+    clip-path: var(--clip-diagonal-hero);
+  }
+  .clip-parallelogram {
+    clip-path: var(--clip-parallelogram);
+  }
+  .clip-navbar {
+    clip-path: var(--clip-navbar);
+  }
+}
