@@ -13,14 +13,14 @@ export default function Footer() {
       >
         <img
           src={logo}
-          alt="Natours logo"
+          alt="Trailora logo"
           className="xs:h-14 h-12 w-auto object-contain md:h-16"
         />
       </NavLink>
 
       <div className="flex w-full flex-col items-center justify-center gap-2 text-center sm:flex-1 lg:flex-row lg:justify-between lg:text-left">
         <p className="leading-relaxed text-[#64748B]">
-          &copy; Natours {new Date().getFullYear()}. All rights reserved.
+          &copy; Trailora {new Date().getFullYear()}. All rights reserved.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-2 text-[#64748B]">

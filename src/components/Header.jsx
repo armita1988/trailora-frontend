@@ -53,7 +53,7 @@ export default function Header() {
             <img
               className="h-11 w-auto md:h-12"
               src={logo}
-              alt="Natours logo"
+              alt="Trailora logo"
             />
           </NavLink>
         </div>

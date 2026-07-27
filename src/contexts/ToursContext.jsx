@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useReducer } from 'react';
 
 const ToursContext = createContext();
-// const BASE_URL = 'https://natours-backend-6br6.onrender.com/app/v1';
+// const BASE_URL = 'https://trailora-backend-6br6.onrender.com/app/v1';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const initialState = {
   tours: [],
