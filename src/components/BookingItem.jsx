@@ -41,7 +41,7 @@ export default function BookingItem({ booking }) {
   endDate.setDate(endDate.getDate() + booking.tour.duration - 1);
 
   const today = new Date();
-  today.setMonth(today.getMonth() + 3);
+  // today.setMonth(today.getMonth() + 3);
   let bookingStatus = booking.bookingStatus;
 
   if (booking.bookingStatus === 'confirmed') {
