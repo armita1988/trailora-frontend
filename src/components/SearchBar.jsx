@@ -79,7 +79,7 @@ function DesktopDropdown({ value, onChange, options, icon, className = '' }) {
 }
 
 export default function SearchBar() {
-  const { getAllTours, error } = useTours();
+  const { getAllTours } = useTours();
 
   const [search, setSearch] = useState('');
   const [destination, setDestination] = useState('');

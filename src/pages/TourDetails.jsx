@@ -58,7 +58,7 @@ export default function TourDetails() {
       const controller = new AbortController();
       getTour(tourId, controller.signal);
     },
-    [tourId],
+    [tourId, getTour],
   );
 
   const visibleReviews = selectedTour?.reviews?.slice(0, 4) ?? [];

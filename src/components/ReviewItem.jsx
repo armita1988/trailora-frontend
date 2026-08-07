@@ -12,7 +12,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function ReviewItem({ review }) {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
-  const { deleteReview, error } = useReviews();
+  const { deleteReview } = useReviews();
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [isDeletingReview, setIsDeletingReview] = useState(false);
   const navigate = useNavigate();

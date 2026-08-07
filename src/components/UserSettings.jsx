@@ -80,6 +80,7 @@ export default function UserSettings() {
   useEffect(
     function () {
       if (error) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setToast({
           status: 'error',
           message: error.message,

@@ -1,28 +1,8 @@
-// import { useEffect } from 'react';
-// import { useReviews } from '../contexts/ReviewContext';
-// import ReviewItem from './ReviewItem';
-
-// export default function UserReviews() {
-//   const { reviews, getMyReviews } = useReviews();
-
-//   // useEffect(() => {
-//   //   getMyReviews();
-//   // }, []);
-
-//   return (
-//     <ul className=" flex flex-col gap-6 items-start flex-2/3 bg-white ">
-//       {reviews.map((review) => (
-//         <ReviewItem review={review} key={review._id} />
-//       ))}
-//     </ul>
-//   );
-// }
-
 import { useReviews } from '../contexts/ReviewContext';
 import ReviewItem from './ReviewItem';
 
 export default function UserReviews() {
-  const { reviews, getMyReviews } = useReviews();
+  const { reviews } = useReviews();
 
   // useEffect(() => {
   //   getMyReviews();

@@ -7,7 +7,7 @@ export default function UserBookings() {
 
   useEffect(() => {
     getMyBookings();
-  }, []);
+  }, [getMyBookings]);
 
   return (
     <div className="flex w-full flex-1 flex-col items-stretch">

@@ -1,5 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react';
 
 const ToursContext = createContext();
 // const BASE_URL = 'https://trailora-backend-6br6.onrender.com/app/v1';
@@ -52,7 +58,7 @@ function ToursProvider({ children }) {
     }
   }
 
-  async function getTour(tourId, signal = null) {
+  const getTour = useCallback(async function getTour(tourId, signal = null) {
     dispatch({ type: 'loading' });
     try {
       const res = await fetch(`${BASE_URL}/tours/${tourId}`, { signal });
@@ -69,7 +75,7 @@ function ToursProvider({ children }) {
         payload: err,
       });
     }
-  }
+  }, []);
 
   useEffect(function () {
     const controller = new AbortController();

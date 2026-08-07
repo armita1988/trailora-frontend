@@ -20,7 +20,7 @@ export default function ReviewForm({
   reviewId = null,
 }) {
   const [userRate, setUserRate] = useState(rating);
-  const [previewRate, setPreviewRate] = useState();
+  const [, setPreviewRate] = useState();
   const [userReview, setUserReview] = useState(review);
 
   const { createReview, updateReview } = useReviews();

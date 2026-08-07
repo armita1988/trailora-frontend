@@ -13,6 +13,7 @@ export default function MainLayout() {
   const [showToast, setShowToast] = useState(false);
   useEffect(() => {
     if (error && error !== 'undefined') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Show toast whenever the auth error changes
       setShowToast(true);
     }
   }, [error]);

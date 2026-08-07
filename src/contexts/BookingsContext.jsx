@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react';
 import { useAuth } from './AuthContext';
 
 const BookingsContext = createContext();
@@ -47,7 +53,7 @@ function BookingsProvider({ children }) {
     reducer,
     initialState,
   );
-  async function getMyBookings() {
+  const getMyBookings = useCallback(async function () {
     try {
       dispatch({ type: 'loading' });
       const res = await fetch(`${API_BASE_URL}/bookings/my-bookings`, {
@@ -65,7 +71,7 @@ function BookingsProvider({ children }) {
     } catch (err) {
       dispatch({ type: 'rejected', payload: err });
     }
-  }
+  }, []);
 
   async function updateBooking(bookingId) {
     try {
@@ -188,7 +194,7 @@ function BookingsProvider({ children }) {
       if (!currentUser) return;
       getMyBookings();
     },
-    [currentUser],
+    [currentUser, getMyBookings],
   );
 
   return (
