@@ -86,7 +86,8 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Deploy frontend to S3
-        run: aws s3 sync dist/ s3://${{ vars.AWS_S3_BUCKET_NAME }} \
+        run: |
+          aws s3 sync dist/ s3://${{ vars.AWS_S3_BUCKET_NAME }} \
           --delete
 
       - name: Invalidate CloudFront cache
