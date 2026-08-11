@@ -1,6 +1,8 @@
 # Trailora Frontend
 
-**Trailora** is a production travel-booking platform that I independently designed, built, and deployed end-to-end. This repository contains the responsive React frontend.
+**Sole Developer | Engineered & Deployed End-to-End**
+
+**Trailora** is a production full-stack travel-booking platform that I independently engineered, built, and deployed end-to-end. This repository contains the responsive React frontend and product experiences I built for the platform.
 
 **Live:** https://trailora.armita.dev  
 **Backend:** https://github.com/armita1988/trailora-backend
@@ -31,8 +33,8 @@
 - Built signup, login, logout, session restoration, profile, password-update, and password-recovery flows
 - Added protected, guest-only, nested, and dynamic routing with React Router
 - Managed shared application state with Context API, `useReducer`, React hooks, and reusable custom hooks
-- Integrated booking/payment flows with the Trailora API and Stripe Checkout
-- Added booking/account experiences and downloadable PDF invoices
+- Integrated booking and payment flows with the Trailora API and Stripe Checkout
+- Built authenticated account and booking experiences with review workflows and downloadable PDF invoices
 - Automated production delivery to Amazon S3 and CloudFront with GitHub Actions and AWS OIDC
 
 ## Tech Stack
