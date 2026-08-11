@@ -1,16 +1,81 @@
-# React + Vite
+# Trailora Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Trailora** is a production travel-booking platform that I independently designed, built, and deployed end-to-end. This repository contains the responsive React frontend.
 
-Currently, two official plugins are available:
+**Live:** https://trailora.armita.dev  
+**Backend:** https://github.com/armita1988/trailora-backend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Product Preview
 
-## React Compiler
+![Trailora tour discovery interface](docs/screenshots/trailora-explore.png)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/trailora-map.png" alt="Trailora interactive tour map" />
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/trailora-bookings.png" alt="Trailora user bookings dashboard" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Interactive tour locations with Leaflet</sub></td>
+    <td align="center"><sub>Authenticated booking management experience</sub></td>
+  </tr>
+</table>
 
-## Expanding the ESLint configuration
+## Highlights
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Built the complete responsive UI for desktop, tablet, and mobile with React and Tailwind CSS
+- Implemented tour discovery, search, filtering, sorting, detailed tour views, and interactive Leaflet maps
+- Built signup, login, logout, session restoration, profile, password-update, and password-recovery flows
+- Added protected, guest-only, nested, and dynamic routing with React Router
+- Managed shared application state with Context API, `useReducer`, React hooks, and reusable custom hooks
+- Integrated booking/payment flows with the Trailora API and Stripe Checkout
+- Added booking/account experiences and downloadable PDF invoices
+- Automated production delivery to Amazon S3 and CloudFront with GitHub Actions and AWS OIDC
+
+## Tech Stack
+
+**Core:** React 19, Vite, Tailwind CSS, React Router  
+**State & UI:** Context API, `useReducer`, React Hooks, Custom Hooks  
+**Maps & Documents:** Leaflet / React Leaflet, html2pdf.js  
+**Delivery:** GitHub Actions, Amazon S3, CloudFront, AWS IAM/OIDC
+
+## Architecture
+
+```text
+React UI
+   ↓
+Routing + Context / Hooks
+   ↓
+Trailora REST API
+   ↓
+Authentication, bookings, payments, and account workflows
+```
+
+The frontend is organized around reusable components, page-level views, global contexts, and shared utilities rather than tightly coupling data and UI logic.
+
+## Production CI/CD
+
+Pushes to `main` run a GitHub Actions pipeline that:
+
+```text
+Install dependencies → Lint → Build with Vite
+→ Authenticate to AWS with OIDC
+→ Sync build to S3
+→ Invalidate CloudFront
+```
+
+The workflow uses short-lived AWS credentials through OIDC instead of static AWS access keys stored in the repository.
+
+## Run Locally
+
+```bash
+git clone https://github.com/armita1988/trailora-frontend.git
+cd trailora-frontend
+npm install
+npm run dev
+```
+
+Configure the frontend API environment variables before starting the development server.
