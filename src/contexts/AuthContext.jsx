@@ -177,8 +177,8 @@ function AuthProvider({ children }) {
       if (!res.ok) {
         throw new Error(`${data.message} (${res.status})`);
       }
-    } catch (err) {
-      console.error('Logout request failed:', err);
+    } catch {
+      // console.error('Logout request failed:', err);
     } finally {
       dispatch({ type: 'user/logout' });
     }

@@ -108,7 +108,7 @@ export default function SearchBar() {
       ),
       onSelect: function (selectedOption) {
         setDestination(selectedOption);
-        console.log('destinations clicked');
+        // console.log('destinations clicked');
       },
     },
     {
@@ -127,7 +127,7 @@ export default function SearchBar() {
       ),
       onSelect: function (selectedOption) {
         setDuration(selectedOption);
-        console.log('duration clicked');
+        // console.log('duration clicked');
       },
     },
     {
@@ -146,7 +146,7 @@ export default function SearchBar() {
       ),
       onSelect: function (selectedOption) {
         setDifficulty(selectedOption);
-        console.log('difficulty clicked');
+        // console.log('difficulty clicked');
       },
     },
     {
@@ -170,20 +170,20 @@ export default function SearchBar() {
       ),
       onSelect: function (selectedOption) {
         setSortBy(selectedOption);
-        console.log('sort by clicked');
+        // console.log('sort by clicked');
       },
     },
   ];
 
   const handleClearAll = function () {
-    console.log('handleClearAll...');
+    // console.log('handleClearAll...');
     setDestination('');
     setDifficulty('');
     setDuration('');
   };
 
   const handleApplyFilters = async function (e) {
-    console.log('on handleApplyFilters ... ');
+    // console.log('on handleApplyFilters ... ');
     setShowFilterSheet(false);
     await handleSubmit(e);
   };
@@ -195,7 +195,7 @@ export default function SearchBar() {
   // };
 
   const handleSelectFilter = function (filter) {
-    console.log(filter);
+    // console.log(filter);
 
     setSelectedFilter(filter);
 
@@ -219,8 +219,8 @@ export default function SearchBar() {
   };
 
   const handleSelectOption = function (value) {
-    console.log('handleSelectedOption...', value);
-    console.log('selectedFilter...', selectedFilter);
+    // console.log('handleSelectedOption...', value);
+    // console.log('selectedFilter...', selectedFilter);
     const filter = filterItems.find((item) => item.key === selectedFilter.key);
     setSelectedOption(value);
     filter.onSelect(value);
@@ -258,7 +258,7 @@ export default function SearchBar() {
           />
 
           <input
-            className="font-inter xs:text-base xs:placeholder:text-sm h-11 w-full rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] pr-3 pl-9 text-xs font-normal text-[#111827] transition-all duration-200 outline-none placeholder:text-xs placeholder:font-light placeholder:text-[#9CA3AF] focus:border-[#0B7A31] focus:bg-white focus:ring-2 focus:ring-[#0B7A31]/15"
+            className="font-inter xs:text-base xs:placeholder:text-sm h-11 w-full rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] pr-3 pl-9 text-base font-normal text-[#111827] transition-all duration-200 outline-none placeholder:text-xs placeholder:font-light placeholder:text-[#9CA3AF] focus:border-[#0B7A31] focus:bg-white focus:ring-2 focus:ring-[#0B7A31]/15"
             name="search"
             type="search"
             enterKeyHint="search"

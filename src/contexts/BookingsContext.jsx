@@ -190,7 +190,7 @@ function BookingsProvider({ children }) {
 
   useEffect(
     function () {
-      console.log('currentUser in useEffect of BookingsContext: ', currentUser);
+      // console.log('currentUser in useEffect of BookingsContext: ', currentUser);
       if (!currentUser) return;
       getMyBookings();
     },

@@ -5,9 +5,9 @@ import { Navigate, useLocation } from 'react-router-dom';
 export default function ProtectedRoute({ children }) {
   const { isCheckingAuth, user } = useAuth();
   const location = useLocation();
-  console.log('in protected location...', location);
+  // console.log('in protected location...', location);
 
-  console.log('in protected: isCheckingAuth...', isCheckingAuth);
+  // console.log('in protected: isCheckingAuth...', isCheckingAuth);
   if (isCheckingAuth) {
     return <Spinner />;
   }

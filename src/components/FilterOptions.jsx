@@ -37,8 +37,8 @@ export default function FilterOptions({
   onSelectOption,
   selectedOption,
 }) {
-  console.log(selectedFilter, 'selected filter...');
-  console.log(selectedOption, 'selected option...');
+  // console.log(selectedFilter, 'selected filter...');
+  // console.log(selectedOption, 'selected option...');
 
   return (
     <div className="font-inter flex max-h-[calc(100dvh-1rem)] w-full flex-col overflow-hidden rounded-t-3xl border-t border-[#E2E8F0] bg-white shadow-[0_-14px_40px_rgba(15,23,42,0.16)] sm:max-h-[calc(100dvh-4rem)] sm:max-w-xl sm:rounded-3xl sm:border">

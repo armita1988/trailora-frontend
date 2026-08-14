@@ -38,7 +38,7 @@ export default function TourDetails() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isBooked = bookings.find((item) => item.tour._id === tourId);
-  console.log('is booked', isBooked);
+  // console.log('is booked', isBooked);
   useEffect(
     function () {
       if (!selectedTour || !sectionRef.current) return;

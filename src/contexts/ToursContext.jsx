@@ -40,7 +40,7 @@ function ToursProvider({ children }) {
 
   async function getAllTours(queryString, signal = null) {
     dispatch({ type: 'loading' });
-    console.log('query string in get all tours:', queryString);
+    // console.log('query string in get all tours:', queryString);
     try {
       const res = await fetch(`${BASE_URL}/tours${queryString}`, { signal });
       if (!res.ok) {

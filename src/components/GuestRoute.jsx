@@ -6,7 +6,7 @@ export default function GuestRoute() {
   const { user, isCheckingAuth } = useAuth();
   const location = useLocation();
   const targetDestination = location?.state?.from || '/me/settings';
-  console.log('target destination in guest route....', targetDestination);
+  // console.log('target destination in guest route....', targetDestination);
 
   if (isCheckingAuth) {
     return <Spinner />;
