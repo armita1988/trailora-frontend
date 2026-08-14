@@ -16,11 +16,23 @@ export default function Login() {
 
   const from = location.state?.from || '/';
 
-  const handleSubmit = async (e) => {
+  const handleLoginWithTestAccount = async (e) => {
     e.preventDefault();
+    const demoEmail = import.meta.env.VITE_DEMO_EMAIL;
+    const demoPassword = import.meta.env.VITE_DEMO_PASSWORD;
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    await performLogin(demoEmail, demoPassword);
+  };
 
+  const handleLoginWithUserAccount = async (e) => {
+    e.preventDefault();
+    await performLogin(email, password);
+  };
+
+  const performLogin = async (loginEmail, loginPassword) => {
     try {
-      await login(email, password);
+      await login(loginEmail, loginPassword);
       setShowSuccess(true);
 
       const options = {
@@ -69,7 +81,10 @@ export default function Login() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex w-full flex-col gap-5">
+        <form
+          onSubmit={handleLoginWithUserAccount}
+          className="flex w-full flex-col gap-5"
+        >
           <div className="flex flex-col items-start gap-2">
             <label
               htmlFor="email"
@@ -121,6 +136,20 @@ export default function Login() {
             className="mt-2 min-h-11 w-full cursor-pointer rounded-xl bg-[#0B7A31] px-6 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#096529] focus:ring-2 focus:ring-[#0B7A31]/20 focus:outline-none"
           >
             Login
+          </button>
+
+          <div className="flex items-center gap-3">
+            <div className="h-px flex-1 bg-[#E2E8F0]" />
+            <span className="text-xs font-medium text-[#94A3B8]">or</span>
+            <div className="h-px flex-1 bg-[#E2E8F0]" />
+          </div>
+
+          <button
+            onClick={handleLoginWithTestAccount}
+            type="button"
+            className="min-h-11 w-full cursor-pointer rounded-xl border border-[#0B7A31] bg-white px-6 py-2.5 text-sm font-semibold text-[#0B7A31] transition-colors duration-200 hover:bg-[#F0FDF4] focus:ring-2 focus:ring-[#0B7A31]/20 focus:outline-none"
+          >
+            Continue with Demo Account
           </button>
         </form>
       </div>

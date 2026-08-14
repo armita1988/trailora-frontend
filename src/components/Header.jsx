@@ -38,7 +38,7 @@ export default function Header() {
   };
 
   const mobileItemClass =
-    'group flex min-h-10 w-full items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium leading-5 text-[#1F2937] transition-colors duration-200 hover:bg-[#F4F8F6] hover:text-[#0B7A31] md:block md:min-h-0 md:w-auto md:rounded-none md:bg-transparent md:p-0 md:text-sm md:font-semibold md:leading-normal md:text-[#111827] md:hover:bg-transparent';
+    'group flex min-h-10 w-full items-center gap-2.5 rounded-lg px-4 py-2 text-[13px] font-medium leading-5 text-[#1F2937] transition-colors duration-200 hover:bg-[#F4F8F6] hover:text-[#0B7A31] md:block md:min-h-0 md:w-auto md:rounded-none md:bg-transparent md:p-0 md:text-sm md:font-semibold md:leading-normal md:text-[#111827] md:hover:bg-transparent';
 
   const mobileIconClass =
     'shrink-0 text-[#64748B] transition-colors duration-200 group-hover:text-[#0B7A31] md:hidden';
@@ -85,7 +85,7 @@ export default function Header() {
             }`}
           >
             <li className={mobileItemClass}>
-              <Mountain size={16} strokeWidth={2} className={mobileIconClass} />
+              {/* <Mountain size={16} strokeWidth={2} className={mobileIconClass} /> */}
 
               <NavLink
                 to="/"
@@ -173,7 +173,7 @@ export default function Header() {
             ) : (
               <>
                 <li className={mobileItemClass}>
-                  <Lock size={16} strokeWidth={2} className={mobileIconClass} />
+                  {/* <Lock size={16} strokeWidth={2} className={mobileIconClass} /> */}
 
                   <NavLink
                     to="/login"

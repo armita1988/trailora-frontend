@@ -258,7 +258,7 @@ export default function SearchBar() {
           />
 
           <input
-            className="font-inter xs:text-sm xs:placeholder:text-sm h-11 w-full rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] pr-3 pl-9 text-xs font-normal text-[#111827] transition-all duration-200 outline-none placeholder:text-xs placeholder:font-light placeholder:text-[#9CA3AF] focus:border-[#0B7A31] focus:bg-white focus:ring-2 focus:ring-[#0B7A31]/15"
+            className="font-inter xs:text-base xs:placeholder:text-sm h-11 w-full rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] pr-3 pl-9 text-xs font-normal text-[#111827] transition-all duration-200 outline-none placeholder:text-xs placeholder:font-light placeholder:text-[#9CA3AF] focus:border-[#0B7A31] focus:bg-white focus:ring-2 focus:ring-[#0B7A31]/15"
             name="search"
             type="search"
             enterKeyHint="search"
