@@ -10,8 +10,8 @@ export default function Dashboard() {
     try {
       e.preventDefault();
       await logout();
-    } catch (err) {
-      console.log('during logout...', err);
+    } catch {
+      // console.log('during logout...', err);
     }
   };
 

@@ -53,7 +53,7 @@ export default function Login() {
 
   useEffect(
     function () {
-      console.log('current user after login:...', user);
+      // console.log('current user after login:...', user);
     },
     [user],
   );

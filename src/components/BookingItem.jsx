@@ -36,9 +36,8 @@ export default function BookingItem({ booking }) {
   const [cancelModalIsOpen, setCancelModalIsOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
-  let startDate = new Date(booking?.tour?.nextStartDate);
-  let endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + booking.tour.duration - 1);
+  let startDate = new Date(booking?.startDate);
+  let endDate = new Date(booking?.endDate);
 
   const today = new Date();
   // today.setMonth(today.getMonth() + 3);
