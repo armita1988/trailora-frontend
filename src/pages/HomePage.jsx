@@ -65,15 +65,15 @@ export default function HomePage() {
         setDifficulty={setDifficulty}
         sortBy={sortBy}
         setSortBy={setSortBy}
-        handleClearAll={clearFilters}
+        clearFilters={clearFilters}
         appliedFilters={appliedFilters}
         applyFilters={applyFilters}
         hasPendingFilterChanges={hasPendingFilterChanges}
         discardFilterChanges={discardFilterChanges}
       />
-      <div className="flex items-center justify-between px-12 pt-3">
-        <p className="text-xs font-medium text-[#64748B]">
-          {tours.length}
+      <div className="mx-auto mt-4 flex w-full max-w-6xl items-center justify-between px-1 2xl:max-w-7xl">
+        <p className="text-sm font-medium text-[#64748B]">
+          <span className="font-semibold text-[#334155]">{tours.length}</span>
           {tours.length === 1 ? ' tour found' : ' tours found'}
         </p>
 
@@ -81,7 +81,7 @@ export default function HomePage() {
           <button
             type="button"
             onClick={clearFilters}
-            className="cursor-pointer text-xs font-medium text-[#64748B] transition-colors duration-200 hover:text-[#0B7A31]"
+            className="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium text-[#64748B] transition-all duration-200 hover:bg-[#F1F7F3] hover:text-[#0B7A31] focus-visible:ring-2 focus-visible:ring-[#0B7A31]/20 focus-visible:outline-none"
           >
             Clear filters
           </button>

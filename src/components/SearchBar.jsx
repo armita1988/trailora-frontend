@@ -86,7 +86,7 @@ export default function SearchBar({
   setDifficulty,
   sortBy,
   setSortBy,
-  handleClearAll,
+  clearFilters,
   appliedFilters,
   applyFilters,
   hasPendingFilterChanges,
@@ -279,11 +279,13 @@ export default function SearchBar({
   return (
     <>
       {/* Mobile filters */}
+      {/* Mobile filters */}
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="shadow-overview xs:-mt-24 xs:p-4 mx-auto -mt-22 grid w-11/12 max-w-3xl grid-cols-2 gap-3 rounded-2xl border border-[#E5E7EB] bg-white p-3 sm:-mt-26 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center lg:hidden"
+        className="shadow-overview xs:-mt-24 xs:p-4 mx-auto -mt-22 grid w-11/12 max-w-3xl grid-cols-1 gap-3 rounded-2xl border border-[#E5E7EB] bg-white p-3 sm:-mt-26 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center lg:hidden"
       >
-        <div className="relative col-span-2 min-w-0 sm:col-span-1">
+        {/* Search */}
+        <div className="relative min-w-0">
           <Search
             size={16}
             className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#6B7280]"
@@ -300,13 +302,14 @@ export default function SearchBar({
           />
         </div>
 
+        {/* Filters button */}
         <button
+          type="button"
           onClick={() => {
             setShowFilterSheet(true);
             setFilterSheetContent('filter');
           }}
-          type="button"
-          className="font-inter flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#CFE0D5] bg-[#F3F8F5] px-4 py-2.5 text-sm font-semibold text-[#0B7A31] transition-colors duration-200 hover:border-[#0B7A31] hover:bg-[#EAF5EE] focus-visible:ring-2 focus-visible:ring-[#0B7A31]/20 focus-visible:outline-none sm:w-auto sm:min-w-26"
+          className="font-inter mx-auto flex min-h-11 w-full max-w-56 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#CFE0D5] bg-[#F3F8F5] px-5 py-2.5 text-sm font-semibold text-[#0B7A31] transition-all duration-200 hover:border-[#0B7A31] hover:bg-[#EAF5EE] focus-visible:ring-2 focus-visible:ring-[#0B7A31]/20 focus-visible:outline-none sm:w-auto sm:max-w-none sm:min-w-28"
         >
           <SlidersHorizontal
             size={17}
@@ -317,13 +320,14 @@ export default function SearchBar({
           <span>Filters</span>
         </button>
       </form>
+
       {showFilterSheet && (
         <MobileFilterSheet onClose={handleCloseFilterSheet}>
           {filterSheetContent === 'filter' && (
             <FilterMenuItems
               items={filterItems}
               onSelect={handleSelectFilter}
-              onClearAll={handleClearAll}
+              onClearAll={clearFilters}
               onApplyFilters={handleApplyFilters}
               hasPendingFilterChanges={hasPendingFilterChanges}
               onClose={handleCloseFilterSheet}
@@ -339,7 +343,6 @@ export default function SearchBar({
           )}
         </MobileFilterSheet>
       )}
-
       {/* desktop filters */}
       <div className="mx-auto -mt-26 hidden max-w-6xl lg:block 2xl:max-w-7xl">
         <form

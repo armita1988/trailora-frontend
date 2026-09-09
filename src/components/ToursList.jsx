@@ -4,9 +4,9 @@ import TourItem from './TourItem';
 import Toast from './Toast';
 
 export default function TourList() {
-  const { tours, error } = useTours();
+  const { tours, error, isLoading } = useTours();
 
-  // if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner />;
   if (error) {
     return <Toast error={error} />;
   }
