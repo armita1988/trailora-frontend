@@ -38,7 +38,7 @@ function ToursProvider({ children }) {
     initialState,
   );
 
-  async function getAllTours(queryString, signal = null) {
+  const getAllTours = useCallback(async function (queryString, signal = null) {
     dispatch({ type: 'loading' });
     // console.log('query string in get all tours:', queryString);
     try {
@@ -56,7 +56,7 @@ function ToursProvider({ children }) {
         payload: err,
       });
     }
-  }
+  }, []);
 
   const getTour = useCallback(async function getTour(tourId, signal = null) {
     dispatch({ type: 'loading' });

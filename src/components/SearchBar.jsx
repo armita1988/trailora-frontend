@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Calendar,
   Search,
@@ -78,14 +78,21 @@ function DesktopDropdown({ value, onChange, options, icon, className = '' }) {
   );
 }
 
-export default function SearchBar() {
+export default function SearchBar({
+  destination,
+  setDestination,
+  duration,
+  setDuration,
+  difficulty,
+  setDifficulty,
+  sortBy,
+  setSortBy,
+  search,
+  setSearch,
+  handleClearAll,
+}) {
   const { getAllTours } = useTours();
 
-  const [search, setSearch] = useState('');
-  const [destination, setDestination] = useState('');
-  const [duration, setDuration] = useState('');
-  const [difficulty, setDifficulty] = useState('');
-  const [sortBy, setSortBy] = useState('-ratingsAverage');
   const [filterSheetContent, setFilterSheetContent] = useState('');
   const [showFilterSheet, setShowFilterSheet] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -175,24 +182,11 @@ export default function SearchBar() {
     },
   ];
 
-  const handleClearAll = function () {
-    // console.log('handleClearAll...');
-    setDestination('');
-    setDifficulty('');
-    setDuration('');
-  };
-
   const handleApplyFilters = async function (e) {
     // console.log('on handleApplyFilters ... ');
     setShowFilterSheet(false);
     await handleSubmit(e);
   };
-
-  // const handleSelectFilter = function (filter) {
-  //   console.log(filter);
-  //   setSelectedFilter(filter);
-  //   setFilterSheetContent('filterOptions');
-  // };
 
   const handleSelectFilter = function (filter) {
     // console.log(filter);
@@ -227,22 +221,38 @@ export default function SearchBar() {
     setFilterSheetContent('filter');
   };
 
+  const searchTours = useCallback(
+    async function (signal = null) {
+      const queryString = new URLSearchParams();
+
+      if (search !== '')
+        queryString.append('search', search.toLowerCase().trim());
+      if (destination !== '') queryString.append('destination', destination);
+      if (duration !== '') {
+        queryString.append('duration[gte]', duration.split('-')[0]);
+        if (duration.split('-')[1] !== '+')
+          queryString.append('duration[lte]', duration.split('-')[1]);
+      }
+      if (difficulty !== '') queryString.append('difficulty', difficulty);
+      queryString.append('sort', sortBy);
+      await getAllTours(`?${queryString.toString()}`, signal);
+    },
+    [search, destination, duration, difficulty, sortBy, getAllTours],
+  );
+
   const handleSubmit = async function (e) {
     e.preventDefault();
-    const queryString = new URLSearchParams();
-
-    if (search !== '')
-      queryString.append('search', search.toLowerCase().trim());
-    if (destination !== '') queryString.append('destination', destination);
-    if (duration !== '') {
-      queryString.append('duration[gte]', duration.split('-')[0]);
-      if (duration.split('-')[1] !== '+')
-        queryString.append('duration[lte]', duration.split('-')[1]);
-    }
-    if (difficulty !== '') queryString.append('difficulty', difficulty);
-    queryString.append('sort', sortBy);
-    await getAllTours(`?${queryString.toString()}`, null);
+    await searchTours();
   };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    searchTours(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
+  }, [searchTours]);
 
   return (
     <>
@@ -315,13 +325,7 @@ export default function SearchBar() {
               }}
             />
           )}
-          {/* {filterSheetContent === 'sort' && (
-            <FilterOptions
-              selectedFilter={filterItems.find((item) => item.key === 'sort')}
-              onSelectOption={handleSelectOption}
-              selectedOption={selectedOption}
-            />
-          )} */}
+
           {filterSheetContent === 'filterOptions' && (
             <FilterOptions
               selectedFilter={selectedFilter}
@@ -333,85 +337,87 @@ export default function SearchBar() {
       )}
 
       {/* desktop filters */}
-      <form
-        onSubmit={handleSubmit}
-        className="shadow-overview mx-auto -mt-26 hidden h-22 max-w-6xl items-center justify-center gap-3 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-4 lg:flex xl:gap-4 xl:px-5 2xl:max-w-7xl 2xl:gap-5"
-      >
-        <div className="relative flex h-full items-center">
-          <Search
-            size={16}
-            className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#6B7280]"
-          />
-
-          <input
-            className="font-inter h-11 w-44 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 pl-9 text-xs font-normal text-[#111827] transition-all duration-300 outline-none placeholder:text-xs placeholder:font-light placeholder:text-[#9CA3AF] focus:border-[#0B7A31] focus:bg-white focus:ring-2 focus:ring-[#0B7A31]/15 xl:w-52 xl:text-sm"
-            name="search"
-            type="text"
-            placeholder="Search tours..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <DesktopDropdown
-          value={destination}
-          onChange={setDestination}
-          className="w-40 xl:w-44"
-          icon={<MapPin size={16} />}
-          options={[
-            { value: '', label: 'All Destinations' },
-            { value: 'usa', label: 'USA' },
-            { value: 'can', label: 'Canada' },
-          ]}
-        />
-
-        <DesktopDropdown
-          value={duration}
-          onChange={setDuration}
-          className="w-36 xl:w-40"
-          icon={<Calendar size={16} />}
-          options={[
-            { value: '', label: 'Any Duration' },
-            { value: '1-3', label: '1–3 Days' },
-            { value: '4-7', label: '4–7 Days' },
-            { value: '8-10', label: '8–10 Days' },
-            { value: '10-+', label: '10+ Days' },
-          ]}
-        />
-
-        <DesktopDropdown
-          value={difficulty}
-          onChange={setDifficulty}
-          className="w-36 xl:w-40"
-          icon={<Gauge size={16} />}
-          options={[
-            { value: '', label: 'Any Difficulty' },
-            { value: 'easy', label: 'Easy' },
-            { value: 'medium', label: 'Medium' },
-            { value: 'difficult', label: 'Difficult' },
-          ]}
-        />
-
-        <DesktopDropdown
-          value={sortBy}
-          onChange={setSortBy}
-          className="w-40 xl:w-48"
-          icon={<ArrowUpDown size={16} />}
-          options={[
-            { value: 'price', label: 'Price: Low to High' },
-            { value: '-price', label: 'Price: High to Low' },
-            { value: '-ratingsAverage', label: 'Rating' },
-            { value: 'duration', label: 'Duration' },
-          ]}
-        />
-
-        <button
-          type="submit"
-          className="h-11 cursor-pointer rounded-xl bg-[#0B7A31] px-5 text-xs font-bold text-white uppercase transition-all duration-300 outline-none hover:bg-[#0A6B2B] hover:shadow-[0_0.5rem_1rem_rgba(0,0,0,0.12)] focus-visible:ring-2 focus-visible:ring-[#0B7A31]/25 focus-visible:ring-offset-2 xl:px-6 xl:text-sm"
+      <div className="mx-auto -mt-26 hidden max-w-6xl lg:block 2xl:max-w-7xl">
+        <form
+          onSubmit={handleSubmit}
+          className="shadow-overview mx-auto -mt-26 hidden h-22 max-w-6xl items-center justify-center gap-3 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-4 lg:flex xl:gap-4 xl:px-5 2xl:max-w-7xl 2xl:gap-5"
         >
-          Search
-        </button>
-      </form>
+          <div className="relative flex h-full items-center">
+            <Search
+              size={16}
+              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-[#6B7280]"
+            />
+
+            <input
+              className="font-inter h-11 w-44 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3 pl-9 text-xs font-normal text-[#111827] transition-all duration-300 outline-none placeholder:text-xs placeholder:font-light placeholder:text-[#9CA3AF] focus:border-[#0B7A31] focus:bg-white focus:ring-2 focus:ring-[#0B7A31]/15 xl:w-52 xl:text-sm"
+              name="search"
+              type="text"
+              placeholder="Search tours..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <DesktopDropdown
+            value={destination}
+            onChange={setDestination}
+            className="w-40 xl:w-44"
+            icon={<MapPin size={16} />}
+            options={[
+              { value: '', label: 'All Destinations' },
+              { value: 'usa', label: 'USA' },
+              { value: 'can', label: 'Canada' },
+            ]}
+          />
+
+          <DesktopDropdown
+            value={duration}
+            onChange={setDuration}
+            className="w-36 xl:w-40"
+            icon={<Calendar size={16} />}
+            options={[
+              { value: '', label: 'Any Duration' },
+              { value: '1-3', label: '1–3 Days' },
+              { value: '4-7', label: '4–7 Days' },
+              { value: '8-10', label: '8–10 Days' },
+              { value: '10-+', label: '10+ Days' },
+            ]}
+          />
+
+          <DesktopDropdown
+            value={difficulty}
+            onChange={setDifficulty}
+            className="w-36 xl:w-40"
+            icon={<Gauge size={16} />}
+            options={[
+              { value: '', label: 'Any Difficulty' },
+              { value: 'easy', label: 'Easy' },
+              { value: 'medium', label: 'Medium' },
+              { value: 'difficult', label: 'Difficult' },
+            ]}
+          />
+
+          <DesktopDropdown
+            value={sortBy}
+            onChange={setSortBy}
+            className="w-40 xl:w-48"
+            icon={<ArrowUpDown size={16} />}
+            options={[
+              { value: '-ratingsAverage', label: 'Rating' },
+              { value: 'price', label: 'Price: Low to High' },
+              { value: '-price', label: 'Price: High to Low' },
+              { value: 'duration', label: 'Duration' },
+            ]}
+          />
+
+          <button
+            type="submit"
+            className="h-11 cursor-pointer rounded-xl bg-[#0B7A31] px-5 text-xs font-bold text-white uppercase transition-all duration-300 outline-none hover:bg-[#0A6B2B] hover:shadow-[0_0.5rem_1rem_rgba(0,0,0,0.12)] focus-visible:ring-2 focus-visible:ring-[#0B7A31]/25 focus-visible:ring-offset-2 xl:px-6 xl:text-sm"
+          >
+            Search
+          </button>
+        </form>
+      </div>
     </>
   );
 }
