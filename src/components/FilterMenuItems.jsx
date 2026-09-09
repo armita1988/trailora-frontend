@@ -7,6 +7,7 @@ export default function FilterMenuItems({
   onClose,
   onClearAll,
   onApplyFilters,
+  hasPendingFilterChanges,
 }) {
   return (
     <div className="font-inter flex max-h-[calc(100dvh-1rem)] w-full flex-col overflow-hidden rounded-t-3xl border-t border-[#E2E8F0] bg-white shadow-[0_-14px_40px_rgba(15,23,42,0.16)] sm:max-h-[calc(100dvh-4rem)] sm:max-w-xl sm:rounded-3xl sm:border">
@@ -59,11 +60,16 @@ export default function FilterMenuItems({
         </button>
 
         <button
-          onClick={(e) => onApplyFilters(e)}
           type="button"
-          className="flex min-h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-[#0B7A31] px-4 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#096529] focus:ring-2 focus:ring-[#0B7A31]/20 focus:outline-none"
+          onClick={onApplyFilters}
+          disabled={!hasPendingFilterChanges}
+          className={`w-full rounded-xl px-4 py-3 text-sm font-semibold transition-colors duration-200 ${
+            hasPendingFilterChanges
+              ? 'cursor-pointer bg-[#0B7A31] text-white hover:bg-[#096529]'
+              : 'cursor-not-allowed border border-[#DCE6DF] bg-[#F1F5F2] text-[#718078]'
+          }`}
         >
-          Apply Filters
+          Show results
         </button>
       </div>
     </div>

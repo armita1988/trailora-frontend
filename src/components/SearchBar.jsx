@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Calendar,
   Search,
@@ -13,7 +13,6 @@ import { useTours } from '../contexts/ToursContext';
 import MobileFilterSheet from './MobileFilterSheet';
 import FilterMenuItems from './FilterMenuItems';
 import FilterOptions from './FilterOptions';
-import SortMenu from './SortMenu';
 
 function DesktopDropdown({ value, onChange, options, icon, className = '' }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,12 +86,15 @@ export default function SearchBar({
   setDifficulty,
   sortBy,
   setSortBy,
-  search,
-  setSearch,
   handleClearAll,
+  appliedFilters,
+  applyFilters,
+  hasPendingFilterChanges,
+  discardFilterChanges,
 }) {
   const { getAllTours } = useTours();
-
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [filterSheetContent, setFilterSheetContent] = useState('');
   const [showFilterSheet, setShowFilterSheet] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -182,10 +184,15 @@ export default function SearchBar({
     },
   ];
 
-  const handleApplyFilters = async function (e) {
-    // console.log('on handleApplyFilters ... ');
+  const handleCloseFilterSheet = function () {
+    discardFilterChanges();
     setShowFilterSheet(false);
-    await handleSubmit(e);
+  };
+
+  const handleApplyFilters = function (e) {
+    e?.preventDefault();
+    applyFilters();
+    setShowFilterSheet(false);
   };
 
   const handleSelectFilter = function (filter) {
@@ -213,52 +220,67 @@ export default function SearchBar({
   };
 
   const handleSelectOption = function (value) {
-    // console.log('handleSelectedOption...', value);
-    // console.log('selectedFilter...', selectedFilter);
     const filter = filterItems.find((item) => item.key === selectedFilter.key);
     setSelectedOption(value);
     filter.onSelect(value);
     setFilterSheetContent('filter');
   };
 
-  const searchTours = useCallback(
-    async function (signal = null) {
-      const queryString = new URLSearchParams();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 600);
 
-      if (search !== '')
-        queryString.append('search', search.toLowerCase().trim());
-      if (destination !== '') queryString.append('destination', destination);
-      if (duration !== '') {
-        queryString.append('duration[gte]', duration.split('-')[0]);
-        if (duration.split('-')[1] !== '+')
-          queryString.append('duration[lte]', duration.split('-')[1]);
-      }
-      if (difficulty !== '') queryString.append('difficulty', difficulty);
-      queryString.append('sort', sortBy);
-      await getAllTours(`?${queryString.toString()}`, signal);
-    },
-    [search, destination, duration, difficulty, sortBy, getAllTours],
-  );
-
-  const handleSubmit = async function (e) {
-    e.preventDefault();
-    await searchTours();
-  };
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search]);
 
   useEffect(() => {
     const controller = new AbortController();
-    searchTours(controller.signal);
+
+    const queryString = new URLSearchParams();
+
+    if (debouncedSearch.trim() !== '') {
+      queryString.append('search', debouncedSearch.toLowerCase().trim());
+    }
+
+    if (appliedFilters.destination !== '') {
+      queryString.append('destination', appliedFilters.destination);
+    }
+
+    if (appliedFilters.duration !== '') {
+      queryString.append(
+        'duration[gte]',
+        appliedFilters.duration.split('-')[0],
+      );
+
+      if (appliedFilters.duration.split('-')[1] !== '+') {
+        queryString.append(
+          'duration[lte]',
+          appliedFilters.duration.split('-')[1],
+        );
+      }
+    }
+
+    if (appliedFilters.difficulty !== '') {
+      queryString.append('difficulty', appliedFilters.difficulty);
+    }
+
+    queryString.append('sort', appliedFilters.sortBy);
+
+    getAllTours(`?${queryString.toString()}`, controller.signal);
 
     return () => {
       controller.abort();
     };
-  }, [searchTours]);
+  }, [debouncedSearch, appliedFilters, getAllTours]);
 
   return (
     <>
       {/* Mobile filters */}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={(e) => e.preventDefault()}
         className="shadow-overview xs:-mt-24 xs:p-4 mx-auto -mt-22 grid w-11/12 max-w-3xl grid-cols-2 gap-3 rounded-2xl border border-[#E5E7EB] bg-white p-3 sm:-mt-26 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center lg:hidden"
       >
         <div className="relative col-span-2 min-w-0 sm:col-span-1">
@@ -279,19 +301,6 @@ export default function SearchBar({
         </div>
 
         <button
-          type="submit"
-          className="font-inter flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0B7A31] px-4 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#096529] focus-visible:ring-2 focus-visible:ring-[#0B7A31]/25 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto sm:min-w-26"
-        >
-          <Search
-            size={16}
-            strokeWidth={2}
-            className="pointer-events-none shrink-0"
-          />
-
-          <span>Search</span>
-        </button>
-
-        <button
           onClick={() => {
             setShowFilterSheet(true);
             setFilterSheetContent('filter');
@@ -309,20 +318,15 @@ export default function SearchBar({
         </button>
       </form>
       {showFilterSheet && (
-        <MobileFilterSheet
-          onClose={() => {
-            setShowFilterSheet(false);
-          }}
-        >
+        <MobileFilterSheet onClose={handleCloseFilterSheet}>
           {filterSheetContent === 'filter' && (
             <FilterMenuItems
               items={filterItems}
               onSelect={handleSelectFilter}
               onClearAll={handleClearAll}
               onApplyFilters={handleApplyFilters}
-              onClose={() => {
-                setShowFilterSheet(false);
-              }}
+              hasPendingFilterChanges={hasPendingFilterChanges}
+              onClose={handleCloseFilterSheet}
             />
           )}
 
@@ -339,7 +343,7 @@ export default function SearchBar({
       {/* desktop filters */}
       <div className="mx-auto -mt-26 hidden max-w-6xl lg:block 2xl:max-w-7xl">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleApplyFilters}
           className="shadow-overview mx-auto -mt-26 hidden h-22 max-w-6xl items-center justify-center gap-3 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-4 lg:flex xl:gap-4 xl:px-5 2xl:max-w-7xl 2xl:gap-5"
         >
           <div className="relative flex h-full items-center">
@@ -412,9 +416,14 @@ export default function SearchBar({
 
           <button
             type="submit"
-            className="h-11 cursor-pointer rounded-xl bg-[#0B7A31] px-5 text-xs font-bold text-white uppercase transition-all duration-300 outline-none hover:bg-[#0A6B2B] hover:shadow-[0_0.5rem_1rem_rgba(0,0,0,0.12)] focus-visible:ring-2 focus-visible:ring-[#0B7A31]/25 focus-visible:ring-offset-2 xl:px-6 xl:text-sm"
+            disabled={!hasPendingFilterChanges}
+            className={`h-11 rounded-xl px-5 text-xs font-bold uppercase transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-[#0B7A31]/25 focus-visible:ring-offset-2 xl:px-6 xl:text-sm ${
+              hasPendingFilterChanges
+                ? 'cursor-pointer bg-[#0B7A31] text-white hover:bg-[#0A6B2B] hover:shadow-[0_0.5rem_1rem_rgba(0,0,0,0.12)]'
+                : 'cursor-not-allowed border border-[#DCE6DF] bg-[#F1F5F2] text-[#718078]'
+            }`}
           >
-            Search
+            Apply Filters
           </button>
         </form>
       </div>

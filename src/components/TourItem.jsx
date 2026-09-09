@@ -23,7 +23,7 @@ export default function TourItem({ tour }) {
         </NavLink>
 
         <p
-          className={`absolute top-4 left-4 flex items-center rounded-full px-3 py-1.5 text-[0.68rem] font-semibold tracking-wide uppercase ${
+          className={`absolute top-3 left-3 flex items-center rounded-lg px-3 py-1.5 text-[0.68rem] font-semibold tracking-wide uppercase ${
             difficultyStyles[tour?.difficulty] ?? ''
           }`}
         >

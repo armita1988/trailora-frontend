@@ -9,7 +9,6 @@ import Dashboard from '../pages/Dashboard';
 import UserSettings from './UserSettings';
 import UserBookings from './UserBookings';
 import UserReviews from './UserReviews';
-import UserBills from './UserBills';
 import ProtectedRoute from './ProtectedRoute';
 import ForgotPassword from '../pages/ForgotPassword';
 import GuestRoute from './GuestRoute';
@@ -38,7 +37,6 @@ function App() {
           <Route path="settings" element={<UserSettings />} />
           <Route path="bookings" element={<UserBookings />} />
           <Route path="reviews" element={<UserReviews />} />
-          <Route path="bills" element={<UserBills />} />
         </Route>
       </Route>
       <Route path="*" element={<NotFound />}></Route>

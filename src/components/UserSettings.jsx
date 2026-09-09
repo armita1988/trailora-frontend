@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import Toast from '../components/Toast';
 
+const demoUser = import.meta.env.VITE_DEMO_EMAIL;
+
 export default function UserSettings() {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [toast, setToast] = useState(null);
 
   const { user, updateUserSettings, updatePassword, error } =
     useOutletContext();
+
+  const isDemoUser = user.email === demoUser;
 
   const [name, setName] = useState(() => {
     return user.name || '';
@@ -163,7 +167,11 @@ export default function UserSettings() {
 
               <label
                 htmlFor="user-photo"
-                className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-[#CFE0D5] bg-white px-4 py-2.5 text-sm font-semibold text-[#0B7A31] transition-colors duration-200 hover:border-[#0B7A31] hover:bg-[#F0F7F2]"
+                className={`inline-flex items-center justify-center rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors duration-200 ${
+                  isDemoUser
+                    ? ' cursor-not-allowed border-[#DCE6DF] bg-[#F1F5F2] text-[#718078]'
+                    : 'cursor-pointer border-[#CFE0D5] bg-white text-[#0B7A31] hover:border-[#0B7A31] hover:bg-[#F0F7F2]'
+                }`}
               >
                 Choose new photo
               </label>
@@ -174,13 +182,19 @@ export default function UserSettings() {
                 name="photo"
                 id="user-photo"
                 onChange={handleUploadPhoto}
+                disabled={isDemoUser}
                 className="hidden"
               />
             </div>
 
             <button
               type="submit"
-              className="xs:w-auto mt-3 min-h-11 w-full cursor-pointer self-end rounded-xl bg-[#0B7A31] px-6 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#096529] focus:ring-2 focus:ring-[#0B7A31]/20 focus:outline-none"
+              disabled={isDemoUser}
+              className={`xs:w-auto mt-3 min-h-11 w-full self-end rounded-xl px-6 py-2.5 text-sm font-semibold transition-colors duration-200 focus:ring-2 focus:ring-[#0B7A31]/20 focus:outline-none ${
+                isDemoUser
+                  ? 'cursor-not-allowed border border-[#DCE6DF] bg-[#F1F5F2] text-[#718078]'
+                  : 'cursor-pointer bg-[#0B7A31] text-white hover:bg-[#096529]'
+              }`}
             >
               Save settings
             </button>
@@ -253,10 +267,14 @@ export default function UserSettings() {
                 required
               />
             </div>
-
             <button
               type="submit"
-              className="xs:w-auto mt-3 min-h-11 w-full cursor-pointer self-end rounded-xl bg-[#0B7A31] px-6 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#096529] focus:ring-2 focus:ring-[#0B7A31]/20 focus:outline-none"
+              disabled={isDemoUser}
+              className={`xs:w-auto mt-3 min-h-11 w-full self-end rounded-xl px-6 py-2.5 text-sm font-semibold transition-colors duration-200 focus:ring-2 focus:ring-[#0B7A31]/20 focus:outline-none ${
+                isDemoUser
+                  ? 'cursor-not-allowed border border-[#DCE6DF] bg-[#F1F5F2] text-[#718078]'
+                  : 'cursor-pointer bg-[#0B7A31] text-white hover:bg-[#096529]'
+              }`}
             >
               Update password
             </button>
